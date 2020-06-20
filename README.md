@@ -156,3 +156,19 @@ Example of the answer:
     "updated_at": "2020-06-20T07:30:33.000000Z"
 }
 ```
+
+####Delete
+```
+DELETE /api/user/{id}
+```
+Where:
+- id - int (user id) 
+
+Example of the answer:
+
+> Status 202 Accepted
+```
+{
+    "deleted": true
+}
+```
