@@ -26,7 +26,7 @@ Seed Users
 ./vessel php artisan db:seed --class=UserSeeder
 ```
 
-Now the application is ready for working!
+Now the application is ready for work!
 
 Run tests
 ```
