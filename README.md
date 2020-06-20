@@ -1,63 +1,158 @@
 
 ## Set up the project
 
+Copy .env file
+```
+cp .env.example .env
+```
+
+Start our containers
+```
+./vessel start
+```
+
+Install composer
+```
+./vessel composer install
+```
+
+Migrate DB
+```
+./vessel php artisan migrate
+```
+
+Seed Users
+```
+./vessel php artisan db:seed --class=UserSeeder
+```
+
+Now the application is ready for working!
+
+Run tests
+```
+./vessel php artisan test
+```
 
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## API
 
-## Learning Laravel
+User
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+####Create the User
+```
+POST /api/user
+```
+Fields 
+- name - string (required, max 255)
+- birth - string (required, format(Y-m-d))
+- password - string (required, min 6)
+- password_repeat - string (required, min 6, same password)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Example of the answer:
 
-## Laravel Sponsors
+> Status 201 Created
+```
+{
+    "data": {
+        "name": "Danys Kurasov",
+        "birth": "1995-11-21",
+        "email": "dionisiy90@gmail.com",
+        "updated_at": "2020-06-20T07:37:18.000000Z",
+        "created_at": "2020-06-20T07:37:18.000000Z",
+        "id": 51
+    },
+    "created": true
+}
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
-- [云软科技](http://www.yunruan.ltd/)
+####Update the user
+```
+PUT /api/user/{id}
+```
+Where:
+- id - int (user id) 
 
-## Contributing
+Fields 
+- name - string (max 255)
+- birth - string (format(Y-m-d))
+- password - string (min 6)
+- password_repeat - string (min 6, same password)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Example of the answer:
 
-## Code of Conduct
+> Status 200 Ok
+```
+{
+    "id": 1,
+    "name": "Danys Kurasov",
+    "birth": "1988-09-29 11:13:09",
+    "email": "saige19@example.org",
+    "created_at": "2020-06-20T07:30:33.000000Z",
+    "updated_at": "2020-06-20T07:41:10.000000Z"
+}
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+####List
+```
+GET /api/user
+```
+Example of the answer:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+> Status 200 Ok
+```
+{
+    "current_page": 1,
+    "data": [
+        {
+            "id": 1,
+            "name": "Danys Kurasov",
+            "birth": "1988-09-29 11:13:09",
+            "email": "saige19@example.org",
+            "created_at": "2020-06-20T07:30:33.000000Z",
+            "updated_at": "2020-06-20T07:41:10.000000Z"
+        },
+        {
+            "id": 2,
+            "name": "Orin Schuppe",
+            "birth": "2008-02-07 17:21:59",
+            "email": "ora08@example.net",
+            "created_at": "2020-06-20T07:30:33.000000Z",
+            "updated_at": "2020-06-20T07:30:33.000000Z"
+        }
+    ],
+    "first_page_url": "http://localhost/api/user?page=1",
+    "from": 1,
+    "last_page": 3,
+    "last_page_url": "http://localhost/api/user?page=3",
+    "next_page_url": "http://localhost/api/user?page=2",
+    "path": "http://localhost/api/user",
+    "per_page": 20,
+    "prev_page_url": null,
+    "to": 20,
+    "total": 51
+}
+```
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+####Show
+```
+GET /api/user/{id}
+```
+Where:
+- id - int (user id) 
+
+Example of the answer:
+
+> Status 200 Ok
+```
+{
+    "id": 2,
+    "name": "Orin Schuppe",
+    "birth": "2008-02-07 17:21:59",
+    "email": "ora08@example.net",
+    "created_at": "2020-06-20T07:30:33.000000Z",
+    "updated_at": "2020-06-20T07:30:33.000000Z"
+}
+```
